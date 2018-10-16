@@ -1,63 +1,67 @@
-# Full-Stack Developer Sample Project
-
-
-## What is it about?
-Here we have a small web application allowing to register for the next Java Meetup.
-Unfortunately the most important part of the app is still missing. The form 
-fields as well as the backend to store the data in memory. But you are here to 
-help us out and get it done.
+# Description
+Project used several new dependencies 
+*spring-boot-starter-data-jpa - used for extending UserRepository and for easier interaction with the database 
+*h2 - used for creation in-memory database in order to save registered users
+*spring-boot-starter-test & spring-test - used for creation of unit tests
+*joda-time - used in User model for creation of *dateCreated* field
+*spring-boot-devtools - used for easier developing spring boot application
  
-## But *what* should I do exactly?
-Extend the form with the required fields (see registration.vm for further details) and 
-store the entered information by using a REST endpoint. Giv the user feedback if the
-save was successful or in case of an error. Ensure mandatory fields will be entered
-and verify the entered values are reasonable e.g. the name must not contains numbers.
+#RegistrationResource 
+Autowired annotation is used in order to use methods in *UserService*
+I changed *save* method. Method receives *User* model, *BindingResult* and *HttpSession* as well. 
+User model needs to be sent in corresponding format, which is defined by annotations in *User* model.
+*BindingResult* is used to check if there are some errors in data which is sent by *registration.vm* file.
+If there are some errors, *bindingResult* is saved into session object and sent to route which returns view *registration.vm*.
+Also, it sends back *User* object to that route so that form fields can be populated with user's data.
+There is also if statement which checks does email already exists in the database. If yes, error message is sent back to the *registration.vm*.
+If validation goes well, user is then inserted in the database and returned to the *registration.vm*, so the data can be shown
+as requested in task.
 
-To start with, please see the already created files and classes. Especially:
+#UserService
+Logger is used to log all activities.
+  *createUserForRegistration - Method creates new user who registered for Java meetup
+  *checkIfUserExists - Method checks does user exists with given email
+  
+I also implemented additional methods in order to show my knowledge
+ *getAllRegisteredUsers - Method gets all registered users
+ *getRegisteredUserById - Method gets registered user by id, it throws ItemNotFoundException if not found
+ *deleteRegisteredUserById - Deletes registered user, it also throws ItemNotFoundException if user was not found
 
-* com.k15t.pat.registration: The package includes a REST endpoint and a controller
-* resources/templates: The folder includes the initial velocity templates for the registration page 
+#User
+Class which represents table in database.
+ *id - represents id of record in database
+ *dateCreated - represents creation date of registration.
+ *name - represents user's name. Mandatory field, of maximum length of 50. Only letters could be inserted.
+ *password - represents user's password. Mandatory field, of maximum length of 255. This was stated this way because password usually encoded.
+ *address - represents user's address. Mandatory field, of maximum length of 50.
+ *email - represents user's email. Mandatory field, of maximum length of 50. This field is unique.
+ *phone - represents user's phone. Size can be maximum 30 characters.
 
-The Maven build creates a executable jar which includes the whole runtime (tomcat) to run the app.
-You can start it with java -jar registration-0.1.0.jar. If the application is started the pages are
-available under http://localhost:8080/registration.html
+#Exceptions
+*ItemFoundException - thrown when email already exists in database.
+*ItemNotFoundException - thrown when user is not found in database.
 
-## A few words about the technology stack
-The application is build on top of Spring Boot (http://projects.spring.io/spring-boot/) providing a runtime container. 
-Furthermore Jersey for implementing REST resources, Velocity for templating pages and jQuery/Bootstrap is included and 
-can be used as well. Building and packaging the application is done with Maven. 
+#UserRepository
+Extends JpaRepository to inherit base JpaRepository methods for CRUD operation on the User.
 
-## What's expected of me?
-When our engineers receive your final result, we'll be looking at the following things:
+#RegistrationController
+It was modified so it can take data from session which is sent by *RegistrationResource* and send the data to *registration.vm* template.
 
-* The documentation provided. Please consider to document assumptions or decisions you made (e.g. technologies used). Clear and concise documentation is a must for a senior role. The documentation should start in the README.md, which can then contain links/pointers into any further documentation.
-* The ability to build it out of the box using maven
-* Improvements you made around the main task  
-* The quality and style of code written
-* The tests and their structure and coverage
-* The choice of technologies used to complete the task. You are free to use whatever you think is needed and helps you to get it done!
+#Templates
+Error template was added to change whitelabel error page. Registration template was extended to show validation errors and registration form. 
 
-Typically we expect it to compile and run on a Mac/Windows environment with Java 8. If your set up is any different, do let us know!
-When you are done share the result via GitHub.
 
-## How to use git ##
+## About project setup
+Project will create in memory database upon start. Database will be created every time on start, deleting older version of database.
+If you want to change this, open *application.properties* file and change *spring.jpa.hibernate.ddl-auto* to *update* or leave it blank.
+In order to run tests successfully, you need firstly run *spring-boot* application.
+Test coverage is **100%** on *UserService*.
 
-To use git to get repository contents run the following git command:
-
-```
-#!bash
-git clone https://bitbucket.org/K15t/k15t-full-stack-dev-tasks.git
-```
-
-Afterwards create a repository in your github or Bitbucket account and configure this empty repository as the remote origin:
 
 ```
 #!bash
 git remote set-url origin git@github.com:you/yourrepo.git
 git push
 ```
-In this way you have now a clean repository and can start to commit to it and we will be able to distinguish between what was your contribution and what was already there. Please do not copy everything into an empty repo and then add all files, this will make the git log and diff a mess.
-
-Tip: Use git as you would in a product environment - small, meaningful commits with descriptive commit messages. This makes it easy for the reviewer to follow your steps and comprehend what you are doing.
 
 Good luck!

@@ -46,7 +46,7 @@ public class User implements Serializable {
 
     @Size(max = 30, message = "Please do not exceed 30 characters!")
     @Column
-    @Pattern(regexp = "(([+][(]?[0-9]{1,3}[)]?)|([(]?[0-9]{4}[)]?))\\s*[)]?[-\\s\\.]?[(]?[0-9]{1,3}[)]?([-\\s\\.]?[0-9]{3})([-\\s\\.]?[0-9]{3,4})",message = "Please enter valid phone number")
+    @Pattern(regexp = "^$|(([+][(]?[0-9]{1,3}[)]?)|([(]?[0-9]{4}[)]?))\\s*[)]?[-\\s\\.]?[(]?[0-9]{1,3}[)]?([-\\s\\.]?[0-9]{3})([-\\s\\.]?[0-9]{3,4})",message = "Please enter valid phone number")
     private String phone;
 
     public User() {

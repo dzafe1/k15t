@@ -56,3 +56,7 @@ Project will create in memory database upon start. Database will be created ever
 If you want to change this, open *application.properties* file and change *spring.jpa.hibernate.ddl-auto* to *update* or leave it blank.
 In order to run tests successfully, you need firstly run *spring-boot* application.
 Test coverage is **100%** on *UserService*.
+
+### Additional notes
+I also know how to use **DAO** and **DTO** classes. I used them in my previous work with Spring,
+but in this case I have decided that it would not be necessary because *User* entity (class) is small.

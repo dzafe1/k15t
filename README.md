@@ -6,7 +6,7 @@ Project used several new dependencies
 *joda-time - used in User model for creation of *dateCreated* field
 *spring-boot-devtools - used for easier developing spring boot application
  
-#RegistrationResource 
+##RegistrationResource 
 Autowired annotation is used in order to use methods in *UserService*
 I changed *save* method. Method receives *User* model, *BindingResult* and *HttpSession* as well. 
 User model needs to be sent in corresponding format, which is defined by annotations in *User* model.
@@ -17,7 +17,7 @@ There is also if statement which checks does email already exists in the databas
 If validation goes well, user is then inserted in the database and returned to the *registration.vm*, so the data can be shown
 as requested in task.
 
-#UserService
+##UserService
 Logger is used to log all activities.
   *createUserForRegistration - Method creates new user who registered for Java meetup
   *checkIfUserExists - Method checks does user exists with given email
@@ -27,7 +27,7 @@ I also implemented additional methods in order to show my knowledge
  *getRegisteredUserById - Method gets registered user by id, it throws ItemNotFoundException if not found
  *deleteRegisteredUserById - Deletes registered user, it also throws ItemNotFoundException if user was not found
 
-#User
+##User
 Class which represents table in database.
  *id - represents id of record in database
  *dateCreated - represents creation date of registration.
@@ -37,17 +37,17 @@ Class which represents table in database.
  *email - represents user's email. Mandatory field, of maximum length of 50. This field is unique.
  *phone - represents user's phone. Size can be maximum 30 characters.
 
-#Exceptions
+##Exceptions
 *ItemFoundException - thrown when email already exists in database.
 *ItemNotFoundException - thrown when user is not found in database.
 
-#UserRepository
+##UserRepository
 Extends JpaRepository to inherit base JpaRepository methods for CRUD operation on the User.
 
-#RegistrationController
+##RegistrationController
 It was modified so it can take data from session which is sent by *RegistrationResource* and send the data to *registration.vm* template.
 
-#Templates
+##Templates
 Error template was added to change whitelabel error page. Registration template was extended to show validation errors and registration form. 
 
 
@@ -56,12 +56,3 @@ Project will create in memory database upon start. Database will be created ever
 If you want to change this, open *application.properties* file and change *spring.jpa.hibernate.ddl-auto* to *update* or leave it blank.
 In order to run tests successfully, you need firstly run *spring-boot* application.
 Test coverage is **100%** on *UserService*.
-
-
-```
-#!bash
-git remote set-url origin git@github.com:you/yourrepo.git
-git push
-```
-
-Good luck!
